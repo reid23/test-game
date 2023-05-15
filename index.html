@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <title>Test Wobsite</title>
+    <link href="style.css" rel="stylesheet">
+</head>
+</html>
+
+<body class="centered" style="background-color:black; font-family: 'Arial';">
+    <div id=ask>
+        <h2 id="question">initial text</h2>
+        <h3 id="score">Score: 0</h3>
+        <div id="T" class="tbutton" onselectstart="return true" onmouseup="answerTrue()">True</div>
+        <div id="F" class="fbutton" onselectstart="return false" onmouseup="answerFalse()">False</div>
+    </div>
+    <div id=gameOver>
+        <h2 id="gameover">Game Over!</h2>
+        <h3 id="finalScore" style="color: white"></h3>
+        <div id="playAgain" style="color: white" onClick="window.location.reload();">Play Again</div>
+    </div>
+    <div id="explain">
+        <h2 id="explain_title"></h2>
+        <p id="explanation"></p>
+        <h3 onclick="nextQuestion()">continue</h3>
+    </div>
+</body>
+<style>
+    #gameover,
+    #finalScore,
+    #playAgain,
+    #explain{
+        color:  white;
+        text-align: center;
+    }
+    .centered {
+        position: absolute;
+        top: 35%;
+        width: 100%;
+    }
+    #question {
+        text-align: center;
+        color: white;
+    }
+    #score {
+        text-align: center;
+        color: white;
+    }
+    .tbutton,
+    .fbutton {
+        /*border: 1px solid red;*/
+        color: white;
+        text-align: center;
+        line-height: 50px;
+        min-height: 50px;
+        width: 40%;
+        background-color: grey;
+
+    }
+    .tbutton {
+        float: left;
+        margin-left: 7%;
+    }
+    .fbutton {
+        float: right;
+        margin-right: 7%;
+    }
+    .hidden {
+        display: none;
+    }
+    .visible {
+        display: block;
+    }
+</style>
+<script type="text/javascript">
+    var questions = [
+      "Apples (correct is false)?",
+      "Bananas (correct is true)?",
+      "Pears (correct is false)?"
+    ];
+    var explanations = [
+        "Apple explanation",
+        "Banana explanation",
+        "Pear explanation"
+    ]
+    var answers = [0, 1, 0];
+    var score = 0;
+    var q_num = 0;
+
+    $(document).ready(function(){
+        score = 0;
+        q_num = 0;
+        document.getElementById("question").innerHTML = questions[q_num];
+        document.getElementById("score").innerHTML = 'Score: ' + score;
+        $("#gameOver").addClass("hidden");
+        $("#ask").addClass("visible");
+        $("#explain").addClass("hidden");
+
+    });
+
+    function nextQuestion() {
+        if (q_num === questions.length-1) {
+            $("#explain").removeClass("visible");
+            $("#explain").addClass("hidden");
+
+            $("#gameOver").removeClass("hidden");
+            $("#gameOver").addClass("visible");
+
+            $("#ask").removeClass("visible");
+            $("#ask").addClass("hidden");
+
+            document.getElementById("finalScore").innerHTML = "Final Score: " + score + "/" + questions.length;
+        } else {
+            q_num += 1;
+            $("#ask").removeClass("hidden");
+            $("#ask").addClass("visible");
+
+            $("#explain").removeClass("visible");
+            $("#explain").addClass("hidden");
+            document.getElementById("score").innerHTML = 'Score: ' + score;
+            document.getElementById("question").innerHTML = questions[q_num];
+        }
+    }
+
+    function explain(correct) {
+        if (correct === 1) {
+            document.getElementById("explain_title").innerHTML = "Correct!"
+        } else {
+            document.getElementById("explain_title").innerHTML = "Not quite."
+        }
+        document.getElementById("explanation").innerHTML = explanations[q_num];
+
+        $("#ask").removeClass("visible");
+        $("#ask").addClass("hidden");
+
+        $("#explain").removeClass("hidden");
+        $("#explain").addClass("visible");
+    }
+
+    function answerTrue() {
+        if (answers[q_num] === 1) {
+            score += 1;
+            explain(1);
+        } else {
+            explain(0);
+        }
+    }
+    function answerFalse() {
+        if (answers[q_num] === 0){
+            score += 1;
+            explain(1);
+        } else {
+            explain(0);
+        }
+    }
+
+</script>
